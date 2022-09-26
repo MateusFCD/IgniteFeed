@@ -1,18 +1,34 @@
+import { Avatar } from "./Avatar";
 import { Comment } from "./Comment";
 import styles from "./Post.module.css";
 
-export function Post() {
+interface PropsPost {
+  id: number;
+  author: author;
+  content: content;
+  publishedAt: Date;
+}
+
+interface author {
+  avatarUrl: string;
+  name: string;
+  role: string;
+}
+
+interface content {
+  type: string;
+  content: string;
+}
+
+export function Post(props: PropsPost) {
   return (
     <article className={styles.post}>
       <header>
         <div className={styles.author}>
-          <img
-            className={styles.avatar}
-            src="https://github.com/MateusFCD.png"
-          />
+          <Avatar hasBorder src={props.author.avatarUrl} />
           <div className={styles.authorInfo}>
-            <strong>Mateus Drumond</strong>
-            <span>Web Developer</span>
+            <strong>{props.author.name}</strong>
+            <span>{props.author.role}</span>
           </div>
         </div>
 
