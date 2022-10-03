@@ -4,9 +4,13 @@ import styles from "./Comment.module.css";
 
 interface PropsComment {
   contentComment: string;
+  onDeleteComment: any;
 }
 
-export function Comment(props: PropsComment) {
+export function Comment({ contentComment, onDeleteComment }: PropsComment) {
+  function handleDeleteComment() {
+    onDeleteComment(contentComment);
+  }
   return (
     <div className={styles.comment}>
       <Avatar hasBorder={false} src="https://github.com/MateusFCD.png" />
@@ -20,11 +24,11 @@ export function Comment(props: PropsComment) {
                 Cerca de 1h átras
               </time>
             </div>
-            <button title="Deletar comentário">
+            <button onClick={handleDeleteComment} title="Deletar comentário">
               <Trash size={24} />
             </button>
           </header>
-          <p>{props.contentComment}</p>
+          <p>{contentComment}</p>
         </div>
 
         <footer>
