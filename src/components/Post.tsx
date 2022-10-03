@@ -44,13 +44,23 @@ export function Post({ author, publishedAt, content }: PropsPost) {
   }
 
   function handleNewCommentChange() {
+    event?.target.setCustomValidity("");
     setNewCommentText(event?.target.value);
   }
 
-  function deleteComment(comment: any) {
-    console.log(`Deletar comentário ${comment}`);
+  function deleteComment(commentToDelete: any) {
+    const commentsWithoutDeletedOne = comments.filter((comment) => {
+      return comment !== commentToDelete;
+    });
+
+    setComments(commentsWithoutDeletedOne);
   }
 
+  function handleNewCommentInvalid() {
+    event?.target.setCustomValidity("Esse campo é obrigatório!");
+  }
+
+  const isNewCommentEmpty = newCommentText.length === 0;
   return (
     <article className={styles.post}>
       <header>
@@ -96,10 +106,14 @@ export function Post({ author, publishedAt, content }: PropsPost) {
           placeholder="Deixe um comentário"
           value={newCommentText}
           onChange={handleNewCommentChange}
+          onInvalid={handleNewCommentInvalid}
+          required
         />
 
         <footer>
-          <button type="submit">Publicar</button>
+          <button type="submit" disabled={isNewCommentEmpty}>
+            Publicar
+          </button>
         </footer>
       </form>
 
