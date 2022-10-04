@@ -4,15 +4,19 @@ import styles from "./Post.module.css";
 
 import { format, formatDistanceToNow } from "date-fns";
 import ptBR from "date-fns/locale/pt-BR";
-import { useState } from "react";
+import { ChangeEvent, FormEvent, InvalidEvent, useState } from "react";
 
 interface PropsPost {
   id: number;
   author: author;
-  content: [{ type: string; content: string }];
+  content: Content[];
   publishedAt: Date;
 }
 
+interface Content {
+  type: "paragraph" | "link";
+  content: string;
+}
 interface author {
   avatarUrl: string;
   name: string;
@@ -36,19 +40,19 @@ export function Post({ author, publishedAt, content }: PropsPost) {
   const [comments, setComments] = useState(["Post legal"]);
   const [newCommentText, setNewCommentText] = useState("");
 
-  function handleCreateNewComment() {
-    event?.preventDefault();
+  function handleCreateNewComment(event: FormEvent) {
+    event.preventDefault();
 
     setComments([...comments, newCommentText]);
     setNewCommentText("");
   }
 
-  function handleNewCommentChange() {
-    event?.target.setCustomValidity("");
-    setNewCommentText(event?.target.value);
+  function handleNewCommentChange(event: ChangeEvent<HTMLTextAreaElement>) {
+    event.target.setCustomValidity("");
+    setNewCommentText(event.target.value);
   }
 
-  function deleteComment(commentToDelete: any) {
+  function deleteComment(commentToDelete: string) {
     const commentsWithoutDeletedOne = comments.filter((comment) => {
       return comment !== commentToDelete;
     });
@@ -56,7 +60,7 @@ export function Post({ author, publishedAt, content }: PropsPost) {
     setComments(commentsWithoutDeletedOne);
   }
 
-  function handleNewCommentInvalid() {
+  function handleNewCommentInvalid(event: InvalidEvent<HTMLTextAreaElement>) {
     event?.target.setCustomValidity("Esse campo é obrigatório!");
   }
 
